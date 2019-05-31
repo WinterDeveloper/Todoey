@@ -8,8 +8,8 @@
 
 import Foundation
 
-class Items {
-    
+class Items : Encodable, Decodable {
+    //all the field has to be standard type, custom type is not right
     var title : String = ""
     var done : Bool = false
     

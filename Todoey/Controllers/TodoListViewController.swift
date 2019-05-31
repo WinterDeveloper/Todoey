@@ -12,31 +12,19 @@ class TodoListViewController: UITableViewController {
     
     var itemArray = [Items]()
     
-    let defaults = UserDefaults.standard
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("items.plist")
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let newItems = Items()
-        newItems.title = "find milk"
-        itemArray.append(newItems)
-        
-        let newItems1 = Items()
-        newItems1.title = "buy eggs"
-        itemArray.append(newItems1)
-        
-        
-        let newItems2 = Items()
-        newItems2.title = "destroy chamdg"
-        itemArray.append(newItems2)
-        
-        
         // Do any additional setup after loading the view.
-        if let items = defaults.array(forKey: "ToDoListItem") as? [Items] {
-            
-            itemArray = items
-            
-        }
+//        if let items = defaults.array(forKey: "ToDoListItem") as? [Items] {
+//
+//            itemArray = items
+//
+//        }
+        loadData()
     }
     
     //Mark - tableview datasource methods
@@ -70,7 +58,7 @@ class TodoListViewController: UITableViewController {
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
         //force it to call datasource method again,it is necessary,if youhave 3 iiitems in the tableview, then it will call this method 3 times
-        tableView.reloadData()
+        saveData()
         
         //use this method when you click on the cell ,it will only be grey for a shorter time
         tableView.deselectRow(at: indexPath, animated: true)
@@ -93,9 +81,7 @@ class TodoListViewController: UITableViewController {
             // what will happen once the user clicked the add item button on ui alert
             self.itemArray.append(newItem)//it is never be a nil even if it is an empty, it is an empty string
             
-            self.defaults.set(self.itemArray, forKey: "ToDoListItem")
-            
-            self.tableView.reloadData()
+            self.saveData()
             
         }
         
@@ -109,7 +95,32 @@ class TodoListViewController: UITableViewController {
         present(alert
             , animated: true
             , completion: nil)
+    }
+    
+    func saveData() {
         
+        let encoder = PropertyListEncoder()
+        
+        do{
+            let data = try encoder.encode(itemArray)
+            try data.write(to :dataFilePath!)
+        }
+        catch{
+            print("error printing the array: \(error)")
+        }
+        tableView.reloadData()
+    }
+    
+    func loadData() {
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                itemArray = try decoder.decode([Items].self, from: data)
+            }
+            catch {
+                print("items: any...")
+            }
+        }
     }
 }
 
