@@ -8,9 +8,11 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeCellViewController {
     
+    @IBOutlet weak var searchBar: UISearchBar!
     let realm = try! Realm()
     
     var todoItems : Results<Items>?
@@ -23,14 +25,45 @@ class TodoListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-//        if let items = defaults.array(forKey: "ToDoListItem") as? [Items] {
-//
-//            itemArray = items
-//
-//        }
-        //loadData()
+        tableView.separatorStyle = .none
+        //at this point, this TodoListViewController may not be inserted into navigationbar so at this point it might be nil, so it will crash
     }
+    // this function will be called just right before the view is going to show up on the screen, it is late than viewdidload
+    override func viewWillAppear(_ animated: Bool) {
+        
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError("navigation controller does not exist")
+        }
+        
+        guard let colorHex = selectedCategory?.color else {
+            fatalError()
+        }
+            
+        title = selectedCategory?.name
+        
+        guard let navBarColor = UIColor(hexString: colorHex) else {
+            fatalError()
+        }
+        navBar.barTintColor = navBarColor
+        //this color is applied to navigation items and bar button items
+        navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
+        
+        navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : ContrastColorOf(navBarColor, returnFlat: true)]
+        
+        searchBar.barTintColor = navBarColor
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        guard let originalColor = UIColor(hexString: "1D98F6") else {
+            fatalError()
+        }
+        
+        navigationController?.navigationBar.barTintColor = originalColor
+        navigationController?.navigationBar.tintColor = FlatWhite()
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : FlatWhite()]
+    }
+    
     
     //Mark - tableview datasource methods
     //what the cell desplyy and how many rows we wanted
@@ -43,10 +76,15 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let item = todoItems?[indexPath.row] {
             cell.textLabel?.text = item.title
+            
+            if let colour = UIColor(hexString: selectedCategory!.color)?.darken(byPercentage: CGFloat(indexPath.row)/CGFloat(todoItems!.count)) {
+                cell.backgroundColor = colour
+                cell.textLabel?.textColor = ContrastColorOf(colour, returnFlat: true)
+            }
             
             //ternary operator ==>
             cell.accessoryType = item.done ? .checkmark : .none
@@ -78,6 +116,20 @@ class TodoListViewController: UITableViewController {
         
         //use this method when you click on the cell ,it will only be grey for a shorter time
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func updateModel(at indexpath: IndexPath) {
+        if let item = todoItems?[indexpath.row] {
+            do {
+                try realm.write {
+                    realm.delete(item)
+                }
+            }catch {
+                print("error deleting items, \(error)")
+            }
+        }
+        
+        //tableView.reloadData()
     }
     
     //Mark - add new items
@@ -151,7 +203,7 @@ extension TodoListViewController : UISearchBarDelegate {
         
         todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
         
-        tableView.reloadData()
+        //tableView.reloadData()
         
     }
 

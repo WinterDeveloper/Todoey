@@ -13,6 +13,7 @@
 		883CEAD822A168010033A7B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 883CEAD722A168010033A7B3 /* Assets.xcassets */; };
 		883CEADB22A168010033A7B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 883CEAD922A168010033A7B3 /* LaunchScreen.storyboard */; };
 		883CEB0F22A340260033A7B3 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883CEB0E22A340260033A7B3 /* CategoryViewController.swift */; };
+		888A7F6222A5E5D50066BF17 /* SwipeCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888A7F6122A5E5D50066BF17 /* SwipeCellViewController.swift */; };
 		88CCB93922A5A51800F8E06D /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CCB93822A5A51800F8E06D /* Items.swift */; };
 		88CCB93B22A5A52300F8E06D /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CCB93A22A5A52300F8E06D /* Category.swift */; };
 		EA02C41147CA387AF5963E28 /* Pods_Todoey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A5E8DBD25879DB9FD9B8B17 /* Pods_Todoey.framework */; };
@@ -28,6 +29,7 @@
 		883CEADA22A168010033A7B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		883CEADC22A168010033A7B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		883CEB0E22A340260033A7B3 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		888A7F6122A5E5D50066BF17 /* SwipeCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeCellViewController.swift; sourceTree = "<group>"; };
 		88CCB93822A5A51800F8E06D /* Items.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Items.swift; sourceTree = "<group>"; };
 		88CCB93A22A5A52300F8E06D /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		8A5E8DBD25879DB9FD9B8B17 /* Pods_Todoey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Todoey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,6 +99,7 @@
 		883CEAE422A169460033A7B3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				888A7F6122A5E5D50066BF17 /* SwipeCellViewController.swift */,
 				883CEB0E22A340260033A7B3 /* CategoryViewController.swift */,
 				883CEAD222A168000033A7B3 /* TodoListViewController.swift */,
 			);
@@ -247,6 +250,7 @@
 				883CEB0F22A340260033A7B3 /* CategoryViewController.swift in Sources */,
 				88CCB93922A5A51800F8E06D /* Items.swift in Sources */,
 				883CEAD322A168000033A7B3 /* TodoListViewController.swift in Sources */,
+				888A7F6222A5E5D50066BF17 /* SwipeCellViewController.swift in Sources */,
 				883CEAD122A168000033A7B3 /* AppDelegate.swift in Sources */,
 				88CCB93B22A5A52300F8E06D /* Category.swift in Sources */,
 			);

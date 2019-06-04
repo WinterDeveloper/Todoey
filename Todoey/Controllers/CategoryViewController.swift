@@ -8,8 +8,9 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeCellViewController {
     
     let realm = try! Realm()
 
@@ -19,6 +20,8 @@ class CategoryViewController: UITableViewController {
         super.viewDidLoad()
         
         loadCategory()
+        
+        tableView.separatorStyle = .none
         
     }
     
@@ -30,13 +33,15 @@ class CategoryViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "no category added yet"
         
-        return cell
+        cell.backgroundColor = UIColor(hexString: categoryArray?[indexPath.row].color ?? "1D98F6")
         
+        cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+
+        return cell
     }
     
     //Mark: - tableview delegate method
@@ -84,6 +89,21 @@ class CategoryViewController: UITableViewController {
         tableView.reloadData()
         
     }
+    
+    //Mark: - delete data from swipe
+    override func updateModel(at indexpath: IndexPath) {
+        if let category = self.categoryArray?[indexpath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(category)
+                }
+            }catch {
+                print("error delete category, \(error)")
+            }
+
+        }
+        //tableView.reloadData()
+    }
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -95,6 +115,7 @@ class CategoryViewController: UITableViewController {
             
             let newCategory = Category()
             newCategory.name = textField.text!
+            newCategory.color = UIColor.randomFlat.hexValue()
             
             //self.categoryArray.append(newCategory)
             //we do not need to append since result is an auto-updating container and it will monitor changes
@@ -112,3 +133,6 @@ class CategoryViewController: UITableViewController {
         
     }
 }
+
+
+
