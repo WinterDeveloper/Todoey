@@ -39,8 +39,6 @@ class SwipeCellViewController: UITableViewController, SwipeTableViewCellDelegate
 //                }
 //
 //            }
-            
-            //tableView.reloadData()
         }
         
         // customize the action appearance

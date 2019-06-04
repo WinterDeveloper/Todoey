@@ -72,6 +72,8 @@ class CategoryViewController: SwipeCellViewController {
         
         categoryArray = realm.objects(Category.self)
         
+        categoryArray = categoryArray?.sorted(byKeyPath: "name", ascending: true)
+        
         tableView.reloadData()
 
     }
@@ -95,6 +97,7 @@ class CategoryViewController: SwipeCellViewController {
         if let category = self.categoryArray?[indexpath.row] {
             do {
                 try self.realm.write {
+                    self.realm.delete(category.items)
                     self.realm.delete(category)
                 }
             }catch {
